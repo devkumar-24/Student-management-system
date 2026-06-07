@@ -3,7 +3,9 @@ from pymongo import MongoClient
 import pandas as pd
 
 # MongoDB Connection
-client = MongoClient("mongodb+srv://devkumar82986_db_user:Dev@89866@cluster0.sof4suw.mongodb.net/?appName=Cluster0")
+client = MongoClient(
+    "mongodb+srv://devkumar82986_db_user:Dev%4089866@cluster0.xxxxx.mongodb.net/"
+)
 db = client["student_db"]
 collection = db["students"]
 

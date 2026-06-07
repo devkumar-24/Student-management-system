@@ -4,7 +4,7 @@ import pandas as pd
 
 # MongoDB Connection
 client = MongoClient(
-    "mongodb+srv://devkumar82986_db_user:Dev%4089866@cluster0.xxxxx.mongodb.net/"
+    "mongodb+srv://devkumar:<dev89866>@cluster0.kgk4tx3.mongodb.net/?appName=Cluster0"
 )
 db = client["student_db"]
 collection = db["students"]

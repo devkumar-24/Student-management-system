@@ -3,92 +3,97 @@ from pymongo import MongoClient
 import pandas as pd
 
 # MongoDB Connection
-client = MongoClient(
-    "mongodb+srv://devkumar:<dev89866>@cluster0.kgk4tx3.mongodb.net/?appName=Cluster0"
+conn = pymongo.MongoClient(
+    "mongodb+srv://devkumar:dev89866@cluster0.kgk4tx3.mongodb.net/?appName=Cluster0"
 )
+
 db = client["student_db"]
 collection = db["students"]
 
+st.set_page_config(page_title="Student Management System")
+
 st.title("🎓 Student Management System")
 
-menu = ["Add Student", "View Students", "Search Student", "Delete Student"]
-choice = st.sidebar.selectbox("Menu", menu)
+menu = st.sidebar.selectbox(
+    "Select Option",
+    ["Add Student", "View Students", "Search Student", "Delete Student"]
+)
 
 # Add Student
-if choice == "Add Student":
+if menu == "Add Student":
 
-    st.subheader("Add Student")
+    st.subheader("Add New Student")
 
-    sid = st.text_input("Student ID")
-    name = st.text_input("Name")
+    name = st.text_input("Student Name")
+    roll = st.text_input("Roll Number")
     course = st.selectbox(
         "Course",
         ["BCA", "BBA", "MCA", "MBA", "B.Tech"]
     )
-    marks = st.number_input(
-        "Marks",
-        min_value=0,
-        max_value=100
-    )
+    age = st.number_input("Age", 1, 100)
 
-    if st.button("Add Student"):
+    if st.button("Save"):
 
-        data = {
-            "Student ID": sid,
-            "Name": name,
-            "Course": course,
-            "Marks": marks
-        }
+        if name and roll:
 
-        collection.insert_one(data)
-        st.success("Student Added Successfully!")
+            data = {
+                "name": name,
+                "roll": roll,
+                "course": course,
+                "age": age
+            }
+
+            collection.insert_one(data)
+
+            st.success("Student Added Successfully!")
+
+        else:
+            st.error("Fill all fields")
 
 # View Students
-elif choice == "View Students":
+elif menu == "View Students":
 
     st.subheader("Student Records")
 
-    students = list(collection.find({}, {"_id": 0}))
+    data = list(collection.find({}, {"_id": 0}))
 
-    if students:
-        df = pd.DataFrame(students)
+    if data:
+        df = pd.DataFrame(data)
         st.dataframe(df)
     else:
         st.warning("No Records Found")
 
 # Search Student
-elif choice == "Search Student":
+elif menu == "Search Student":
 
     st.subheader("Search Student")
 
-    sid = st.text_input("Enter Student ID")
+    roll = st.text_input("Enter Roll Number")
 
     if st.button("Search"):
 
         student = collection.find_one(
-            {"Student ID": sid},
+            {"roll": roll},
             {"_id": 0}
         )
 
         if student:
-            st.json(student)
+            st.write(student)
         else:
             st.error("Student Not Found")
 
 # Delete Student
-elif choice == "Delete Student":
+elif menu == "Delete Student":
 
     st.subheader("Delete Student")
 
-    sid = st.text_input("Enter Student ID to Delete")
+    roll = st.text_input("Enter Roll Number to Delete")
 
     if st.button("Delete"):
 
-        result = collection.delete_one(
-            {"Student ID": sid}
-        )
+        result = collection.delete_one({"roll": roll})
 
         if result.deleted_count:
-            st.success("Student Deleted")
+            st.success("Student Deleted Successfully")
         else:
             st.error("Student Not Found")

@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import pandas as pd
 
 # MongoDB Connection
-conn = pymongo.MongoClient(
+client = MongoClient(
     "mongodb+srv://devkumar:dev89866@cluster0.kgk4tx3.mongodb.net/?appName=Cluster0"
 )
 
